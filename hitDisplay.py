@@ -12,9 +12,10 @@ class HitDisplay:
     def __init__(self):
         #elemid =np.where(hits==True)[1]
         #detid = np.where(hits==True)[0]
+        elemid = None
+        detid = None
         
         
-        print("HitDisplay")
         
         
 
