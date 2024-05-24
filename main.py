@@ -11,6 +11,9 @@ import pyqtgraph as pg
 import calc
 import numpy as np
 from scipy.optimize import curve_fit
+import time
+import os
+
 
 # Define a class for our main window that inherits from QMainWindow
 class MainWindow(QMainWindow):
@@ -72,6 +75,8 @@ class MainWindow(QMainWindow):
         plot_layout.addWidget(self.plot_widget_vty)
         plot_layout.addWidget(self.plot_widget_vtz)
 
+
+    
         # Initialize DataOrganizer
         self.organizer = DataOrganizer()
         self.organizer.organizeData()
@@ -88,13 +93,18 @@ class MainWindow(QMainWindow):
         self.hit_display()
         self.invariant_mass_display()
         self.vertex_per_spill()
+ 
+
+        
   
 
     def hit_display(self):
-        if self.ith_event >= 40:
-            self.timer.stop()  # Stop the timer after 10 iterations
-            return
         elementid, detectorid, selectedEvents, sid, hits, eventID, track = self.organizer.grab_HitInfo()
+        print(len(selectedEvents))
+        if self.ith_event >= len(selectedEvents):
+            self.timer.stop() 
+            return
+        
         hitmatrices = HitDisplay()
         scatter_raw = hitmatrices.Raw_Hit(elementid, detectorid, selectedEvents, sid, eventID, self.ith_event)
         scatter_cluster = hitmatrices.Cluster_Hit(hits, selectedEvents, sid, eventID, self.ith_event)
@@ -147,6 +157,9 @@ class MainWindow(QMainWindow):
         # Plot the histogram
         histogram_item.setData(x=bin_edges, y=hist, stepMode=True, fillLevel=0, brush='b')
 
+        # Clear the plot widget before drawing new data
+        self.plot_widget_2.clear()
+
         # Set labels and title
         self.plot_widget_2.setLabel('left', 'Frequency')
         self.plot_widget_2.setLabel('bottom', 'Value')
@@ -187,6 +200,10 @@ class MainWindow(QMainWindow):
         hist_vty.setData(x=bin_edges_vty, y=hist_vty_data, stepMode=True, fillLevel=0, brush='g')
         hist_vtz.setData(x=bin_edges_vtz, y=hist_vtz_data, stepMode=True, fillLevel=0, brush='b')
 
+        # Clear the plot widget before drawing new data
+        self.plot_widget_vtx.clear()
+        self.plot_widget_vty.clear()
+        self.plot_widget_vtz.clear()
         # Add histograms to the plot widgets
         self.plot_widget_vtx.addItem(hist_vtx)
         self.plot_widget_vty.addItem(hist_vty)
