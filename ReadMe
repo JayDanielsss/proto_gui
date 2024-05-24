@@ -1,0 +1,2 @@
+This is the proto_gui to sub in for the actual OROM GUI for SpinQuest which is under developement. 
+This will need a directory called data, with two sub directories. raw and reconstructed. 
