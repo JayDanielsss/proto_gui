@@ -69,5 +69,5 @@ def calcVariables(mom):
         phi[i] = np.arctan2(2.0 * np.sqrt(mass[i] * mass[i] + pT[i] * pT[i]) * (p_neg[0] * p_pos[1] - p_pos[0] * p_neg[1]), 
                             mass[i] * (p_pos[0] * p_pos[0] - p_neg[0] * p_neg[0] + p_pos[1] * p_pos[1] - p_neg[1] * p_neg[1]))
         sintheta[i] = np.sqrt(1 - costheta[i]**2)
-    return mass#, pT, x1, x2, xF, costheta, sintheta, phi
+    return mass, pT, x1, x2, xF, costheta, sintheta, phi
 
