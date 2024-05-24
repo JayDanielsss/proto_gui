@@ -2,13 +2,14 @@
 
 # Native Package | os
 import os
-
+import glob
 # External Packages | NumPy
 import numpy as np
 
 # Modules | Directories
-from spinquest_gui.modules.calculations.QTracker import QTracker
-from spinquest_gui.modules.directories.directory_health import get_raw_contents, get_reconstructed_directory
+from QTracker import QTracker
+import time
+
 class DataOrganizer:
     
     def __init__(self):
@@ -21,11 +22,28 @@ class DataOrganizer:
         self.elementid = None
         
         
-        
+    
     def organizeData(self):
         #finds the raw file
 
-        raw_files = get_raw_contents()
+        # Define the path to the folder
+        folder_path = 'raw'
+
+        # Check if the folder exists
+        if os.path.exists(folder_path):
+            # Get the list of files in the folder
+            raw_files = glob.glob(os.path.join(folder_path, '*'))
+            
+            # Check if the folder contains any files
+            if raw_files:
+                # Sort the list of files by time modified
+                raw_files.sort(key=os.path.getmtime)
+            else:
+                print(f"The folder '{folder_path}' is empty.")
+        else:
+            print(f"The folder '{folder_path}' does not exist.")
+
+        
 
         # Get the most recent file path
         if raw_files:
@@ -53,7 +71,8 @@ class DataOrganizer:
 
             #self.mom = self.reco[15:21][abs(self.reco[15:21]) < 120]
         
-            sub_array = self.reco[15:21]
+            sub_array = self.reco[15:21].T
+            
             self.mom = np.where(abs(sub_array) < 120, sub_array, 0)
             #self.mom = np.reshape[]
             #self.mom = self.mom.reshape(-1,6)
@@ -107,18 +126,18 @@ class DataOrganizer:
     def grab_meta(self):
         return self.sid, self.rid,     
 
-# #Testing
+# # #Testing
 # t0 = time.time()
 #  #Create an instance of dataOrganizer
-# organizer = dataOrganizer()
+# organizer = DataOrganizer()
 
 # # Call the organizeData() method to populate the necessary attributes
 # organizer.organizeData()
 
 # # Call the organizeData() method on the instance
 
-# vtx, vty, vtz, sid, eventID = organizer.grab_Vertex()
-# print(sid)
+# mom = organizer.grab_mom()
+# print(mom)
 # t1 = time.time()
 
 # total = t1 - t0
